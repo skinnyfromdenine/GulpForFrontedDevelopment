@@ -16,6 +16,10 @@ let gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     babel = require('gulp-babel'),
     eslint = require('gulp-eslint'),
+    webp = require('gulp-webp'),
+    webphtml = require('gulp-webp-html'),
+    webpcss = require('gulp-webpcss'),
+    svgSprite = require('gulp-svg-sprite'),
     gulpStylelint = require('gulp-stylelint');
 
 
@@ -50,6 +54,7 @@ let path = {
 function html() {
     return src(path.app.html)
         .pipe(fileinclude())
+        .pipe(webphtml())
         .pipe(dest(path.build.html))
 }
 
@@ -70,6 +75,7 @@ function css() {
                 suffix: '.min'
             })
         )
+        .pipe(webpcss())
         .pipe(clean_css())
         .pipe(dest(path.build.style))
 }
@@ -123,6 +129,11 @@ function images() {
                     removeViewBox: false
                 }],
                 optimizationLevel: 3
+            })
+        )
+        .pipe(
+            webp({
+                quality: 70
             })
         )
         .pipe(dest(path.build.img))
