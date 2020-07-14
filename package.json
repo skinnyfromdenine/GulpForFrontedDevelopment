@@ -1,0 +1,47 @@
+{
+  "name": "gulpfrontend",
+  "version": "1.0.0",
+  "description": "A Gulp 4 build for frontend development",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skinnyfromdenine/GulpFrontEnd.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skinnyfromdenine/GulpFrontEnd/issues"
+  },
+  "homepage": "https://github.com/skinnyfromdenine/GulpFrontEnd#readme",
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "browser-sync": "^2.26.7",
+    "del": "^5.1.0",
+    "eslint": "^7.4.0",
+    "eslint-config-google": "^0.14.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-babel": "^8.0.0-beta.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^6.0.0",
+    "gulp-file-include": "^2.2.2",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-sass": "^4.1.0",
+    "gulp-stylelint": "^13.0.0",
+    "gulp-uglify-es": "^2.0.0",
+    "normalize.css": "^8.0.1",
+    "stylelint": "^13.6.1",
+    "stylelint-config-recess-order": "^2.0.4",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-scss": "^3.18.0"
+  },
+  "dependencies": {
+    "slick-carousel": "^1.8.1"
+  }
+}
