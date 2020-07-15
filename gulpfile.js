@@ -122,21 +122,21 @@ function libsJs() {
 
 function images() {
     return src(path.app.img)
-        .pipe(
-            imagemin({
-                progressive: true,
-                svgoPlugins: [{
-                    removeViewBox: false
-                }],
-                optimizationLevel: 3
-            })
-        )
-        .pipe(
-            webp({
-                quality: 70
-            })
-        )
-        .pipe(dest(path.build.img))
+    .pipe(
+        webp({
+            quality: 70
+        })
+    )
+    .pipe(dest(path.build.img))
+    .pipe(src(path.app.img))
+    .pipe(
+        imagemin({
+            progressive: true,
+            svgoPlugins: [{removeViewBox: false}],
+            optimizationLevel: 3
+        })
+    )
+    .pipe(dest(path.build.img))
 }
 
 function fonts() {
