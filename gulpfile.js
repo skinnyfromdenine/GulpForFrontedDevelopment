@@ -31,21 +31,24 @@ let path = {
         js: project_folder + '/js/',
         style: project_folder + '/css/',
         img: project_folder + '/img/',
-        fonts: project_folder + '/fonts/'
+        fonts: project_folder + '/fonts/',
+        sprites: project_folder + '/sprites/'
     },
     app: {
         html: ['app/*.html', '!' + 'app/_*.html'],
         js: 'app/js/main.js',
         style: 'app/scss/style.scss',
         img: 'app/images/**/*.{jpg,png,svg,gid,ico,webp}',
-        fonts: 'app/fonts/**/*.ttf'
+        fonts: 'app/fonts/**/*.ttf',
+        svg: 'app/svg/**/*.svg'
     },
     watch: {
         html: 'app/**/*.html',
         js: 'app/js/**/*.js',
         style: 'app/scss/**/*.scss',
         img: 'app/images/**/*.{jpg,png,svg,gid,ico,webp}',
-        fonts: 'app/fonts/**/*.*'
+        fonts: 'app/fonts/**/*.*',
+        svg: 'app/svg/**/*.svg'
     },
     clean: project_folder
 };
@@ -142,7 +145,7 @@ function images() {
 }
 
 function sprite() {
-    return src(path.app.img)
+    return src(path.app.svg)
         .pipe(svgSprite({
             mode: {
                 stack: {
@@ -150,7 +153,7 @@ function sprite() {
                 }
             },
         }))
-        .pipe(dest(path.build.img))
+        .pipe(dest(path.build.sprites))
 }
 
 function fonts() {
@@ -170,6 +173,7 @@ function serve(cb) {
     gulp.watch([path.watch.style], gulp.series(css)).on('change', server.reload)
     gulp.watch([path.watch.js], gulp.series(js)).on('change', server.reload)
     gulp.watch([path.watch.img], gulp.series(images)).on('change', server.reload)
+    gulp.watch([path.watch.svg], gulp.series(sprite)).on('change', server.reload)
 
     return cb()
 }
