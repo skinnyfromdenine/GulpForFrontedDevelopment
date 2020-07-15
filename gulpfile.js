@@ -19,7 +19,6 @@ let gulp = require('gulp'),
     webp = require('gulp-webp'),
     webphtml = require('gulp-webp-html'),
     webpcss = require('gulp-webpcss'),
-    svgSprite = require('gulp-svg-sprite'),
     gulpStylelint = require('gulp-stylelint');
 
 
@@ -31,16 +30,14 @@ let path = {
         js: project_folder + '/js/',
         style: project_folder + '/css/',
         img: project_folder + '/img/',
-        fonts: project_folder + '/fonts/',
-        sprites: project_folder + '/sprites/'
+        fonts: project_folder + '/fonts/'
     },
     app: {
         html: ['app/*.html', '!' + 'app/_*.html'],
         js: 'app/js/main.js',
         style: 'app/scss/style.scss',
         img: 'app/images/**/*.{jpg,png,svg,gid,ico,webp}',
-        fonts: 'app/fonts/**/*.ttf',
-        svg: 'app/svg/**/*.svg'
+        fonts: 'app/fonts/**/*.ttf'
     },
     watch: {
         html: 'app/**/*.html',
@@ -144,18 +141,6 @@ function images() {
         .pipe(dest(path.build.img))
 }
 
-function sprite() {
-    return src(path.app.svg)
-        .pipe(svgSprite({
-            mode: {
-                stack: {
-                    sprite: '../sprite.svg  '
-                }
-            },
-        }))
-        .pipe(dest(path.build.sprites))
-}
-
 function fonts() {
     return src(path.app.fonts)
         .pipe(dest(path.build.fonts))
@@ -173,7 +158,6 @@ function serve(cb) {
     gulp.watch([path.watch.style], gulp.series(css)).on('change', server.reload)
     gulp.watch([path.watch.js], gulp.series(js)).on('change', server.reload)
     gulp.watch([path.watch.img], gulp.series(images)).on('change', server.reload)
-    gulp.watch([path.watch.svg], gulp.series(sprite)).on('change', server.reload)
 
     return cb()
 }
@@ -182,7 +166,7 @@ function clean(params) {
     return del(path.clean);
 }
 
-let build = gulp.series(clean, gulp.parallel(html, css, libsCss, js, libsJs, images, fonts, linting, sprite))
+let build = gulp.series(clean, gulp.parallel(html, css, libsCss, js, libsJs, images, fonts, linting))
 let watch = gulp.parallel(serve, build);
 
 exports.images = images;
