@@ -122,21 +122,35 @@ function libsJs() {
 
 function images() {
     return src(path.app.img)
-    .pipe(
-        webp({
-            quality: 70
-        })
-    )
-    .pipe(dest(path.build.img))
-    .pipe(src(path.app.img))
-    .pipe(
-        imagemin({
-            progressive: true,
-            svgoPlugins: [{removeViewBox: false}],
-            optimizationLevel: 3
-        })
-    )
-    .pipe(dest(path.build.img))
+        .pipe(
+            webp({
+                quality: 70
+            })
+        )
+        .pipe(dest(path.build.img))
+        .pipe(src(path.app.img))
+        .pipe(
+            imagemin({
+                progressive: true,
+                svgoPlugins: [{
+                    removeViewBox: false
+                }],
+                optimizationLevel: 3
+            })
+        )
+        .pipe(dest(path.build.img))
+}
+
+function sprite() {
+    return src(path.app.img)
+        .pipe(svgSprite({
+            mode: {
+                stack: {
+                    sprite: '../sprite.svg  '
+                }
+            },
+        }))
+        .pipe(dest(path.build.img))
 }
 
 function fonts() {
@@ -164,7 +178,7 @@ function clean(params) {
     return del(path.clean);
 }
 
-let build = gulp.series(clean, gulp.parallel(html, css, libsCss, js, libsJs, images, fonts, linting))
+let build = gulp.series(clean, gulp.parallel(html, css, libsCss, js, libsJs, images, fonts, linting, sprite))
 let watch = gulp.parallel(serve, build);
 
 exports.images = images;
