@@ -44,8 +44,7 @@ let path = {
         js: 'app/js/**/*.js',
         style: 'app/scss/**/*.scss',
         img: 'app/images/**/*.{jpg,png,svg,gid,ico,webp}',
-        fonts: 'app/fonts/**/*.*',
-        svg: 'app/svg/**/*.svg'
+        fonts: 'app/fonts/**/*.*'
     },
     clean: project_folder
 };
