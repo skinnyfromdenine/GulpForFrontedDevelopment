@@ -34,7 +34,7 @@ let path = {
     },
     app: {
         html: ['app/*.html', '!' + 'app/_*.html'],
-        js: 'app/js/main.js',
+        js: 'app/js/script.js',
         style: 'app/scss/style.scss',
         img: 'app/images/**/*.{jpg,png,svg,gid,ico,webp}',
         fonts: 'app/fonts/**/*.ttf'
