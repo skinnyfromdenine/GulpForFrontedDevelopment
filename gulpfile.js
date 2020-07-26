@@ -71,13 +71,14 @@ function css() {
                 overrideBrowserslist: ['last 8 versions'],
             }),
         )
+        .pipe(webpcss())
+        .pipe(dest(path.build.style))
+        .pipe(clean_css())
         .pipe(
             rename({
                 suffix: '.min',
             }),
         )
-        .pipe(webpcss())
-        .pipe(clean_css())
         .pipe(dest(path.build.style));
 }
 
@@ -110,7 +111,14 @@ function js() {
         .pipe(eslint({}))
         .pipe(eslint.format())
         .pipe(babel())
+        .pipe(fileinclude())
+        .pipe(dest(path.build.js))
         .pipe(uglify())
+        .pipe(
+            rename({
+                extname: '.min.js'
+            })
+        )
         .pipe(dest(path.build.js));
 }
 
@@ -120,7 +128,6 @@ function libsJs() {
     ])
         .pipe(plumber())
         .pipe(concat('libs.min.js'))
-        .pipe(fileinclude())
         .pipe(uglify())
         .pipe(dest(path.build.js));
 }
