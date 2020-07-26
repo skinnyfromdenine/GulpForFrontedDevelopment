@@ -20,7 +20,7 @@ let gulp = require('gulp'),
     webphtml = require('gulp-webp-html'),
     webpcss = require('gulp-webpcss'),
     plumber = require('gulp-plumber');
-gulpStylelint = require('gulp-stylelint');
+    gulpStylelint = require('gulp-stylelint');
 
 
 let project_folder = require('path').basename(__dirname);
