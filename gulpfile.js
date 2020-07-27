@@ -19,7 +19,9 @@ let gulp = require('gulp'),
     webp = require('gulp-webp'),
     webphtml = require('gulp-webp-html'),
     webpcss = require('gulp-webpcss'),
-    plumber = require('gulp-plumber');
+    plumber = require('gulp-plumber'),
+    ttf2woof = require('gulp-ttf2woff'),
+    ttf2woof2 = require('gulp-ttf2woff2'),
     gulpStylelint = require('gulp-stylelint');
 
 
@@ -84,10 +86,10 @@ function css() {
 
 function libsCss() {
     return src([
-        'node_modules/normalize.css/normalize.css',
-        'node_modules/slick-carousel/slick/slick.css',
-        'node_modules/slick-carousel/slick/slick-theme.css',
-    ])
+            'node_modules/normalize.css/normalize.css',
+            'node_modules/slick-carousel/slick/slick.css',
+            'node_modules/slick-carousel/slick/slick-theme.css',
+        ])
         .pipe(plumber())
         .pipe(concat('libs.min.css'))
         .pipe(clean_css())
@@ -124,8 +126,8 @@ function js() {
 
 function libsJs() {
     return src([
-        'node_modules/slick-carousel/slick/slick.js',
-    ])
+            'node_modules/slick-carousel/slick/slick.js',
+        ])
         .pipe(plumber())
         .pipe(concat('libs.min.js'))
         .pipe(uglify())
@@ -157,6 +159,9 @@ function images() {
 function fonts() {
     return src(path.app.fonts)
         .pipe(plumber())
+        .pipe(ttf2woof())
+        .pipe(dest(path.build.fonts))
+        .pipe(ttf2woof2())
         .pipe(dest(path.build.fonts));
 }
 
