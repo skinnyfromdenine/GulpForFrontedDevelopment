@@ -22,6 +22,7 @@ let gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     ttf2woof = require('gulp-ttf2woff'),
     ttf2woof2 = require('gulp-ttf2woff2'),
+    svgSprite = require('gulp-svg-sprite'),
     gulpStylelint = require('gulp-stylelint');
 
 
@@ -41,6 +42,7 @@ let path = {
         style: 'app/scss/style.scss',
         img: 'app/images/**/*.{jpg,png,svg,gid,ico,webp}',
         fonts: 'app/fonts/**/*.ttf',
+        sprites: 'app/sprites/**/*.svg',
     },
     watch: {
         html: 'app/**/*.html',
@@ -48,6 +50,7 @@ let path = {
         style: 'app/scss/**/*.scss',
         img: 'app/images/**/*.{jpg,png,svg,gid,ico,webp}',
         fonts: 'app/fonts/**/*.*',
+        sprites: 'app/sprites/**/*.svg',
     },
     clean: project_folder,
 };
@@ -55,6 +58,7 @@ let path = {
 
 function html() {
     return src(path.app.html)
+        .pipe(plumber())
         .pipe(fileinclude())
         .pipe(webphtml())
         .pipe(dest(path.build.html));
@@ -86,10 +90,10 @@ function css() {
 
 function libsCss() {
     return src([
-            'node_modules/normalize.css/normalize.css',
-            'node_modules/slick-carousel/slick/slick.css',
-            'node_modules/slick-carousel/slick/slick-theme.css',
-        ])
+        'node_modules/normalize.css/normalize.css',
+        'node_modules/slick-carousel/slick/slick.css',
+        'node_modules/slick-carousel/slick/slick-theme.css',
+    ])
         .pipe(plumber())
         .pipe(concat('libs.min.css'))
         .pipe(clean_css())
@@ -118,16 +122,16 @@ function js() {
         .pipe(uglify())
         .pipe(
             rename({
-                extname: '.min.js'
-            })
+                extname: '.min.js',
+            }),
         )
         .pipe(dest(path.build.js));
 }
 
 function libsJs() {
     return src([
-            'node_modules/slick-carousel/slick/slick.js',
-        ])
+        'node_modules/slick-carousel/slick/slick.js',
+    ])
         .pipe(plumber())
         .pipe(concat('libs.min.js'))
         .pipe(uglify())
@@ -165,6 +169,29 @@ function fonts() {
         .pipe(dest(path.build.fonts));
 }
 
+function sprite() {
+    return src(path.app.sprites)
+        .pipe(plumber())
+        .pipe(svgSprite({
+                mode: {
+                    stack: {
+                        sprite: '../sprite.svg',  //sprite file name
+                    },
+                },
+            },
+        ))
+        .pipe(
+            imagemin({
+                progressive: true,
+                svgoPlugins: [{
+                    removeViewBox: false,
+                }],
+                optimizationLevel: 3,
+            }),
+        )
+        .pipe(dest(path.build.img));
+}
+
 function serve(cb) {
     server.init({
         server: project_folder,
@@ -177,15 +204,16 @@ function serve(cb) {
     gulp.watch([path.watch.style], gulp.series(css)).on('change', server.reload);
     gulp.watch([path.watch.js], gulp.series(js)).on('change', server.reload);
     gulp.watch([path.watch.img], gulp.series(images)).on('change', server.reload);
+    gulp.watch([path.watch.sprites], gulp.series(images)).on('change', server.reload);
 
     return cb();
 }
 
-function clean(params) {
+function clean() {
     return del(path.clean);
 }
 
-let build = gulp.series(clean, gulp.parallel(html, css, libsCss, js, libsJs, images, fonts, linting));
+let build = gulp.series(clean, gulp.parallel(html, css, libsCss, js, libsJs, images, fonts, linting, sprite));
 let watch = gulp.parallel(serve, build);
 
 exports.images = images;
@@ -197,4 +225,5 @@ exports.watch = watch;
 exports.libsCss = libsCss;
 exports.libsJs = libsJs;
 exports.linting = linting;
+exports.sprite = sprite;
 exports.default = watch;
